@@ -1,0 +1,122 @@
+<view class="container">
+  <!-- 分类标签 -->
+  <view class="category-tabs">
+    <scroll-view class="tab-scroll" scroll-x>
+      <view 
+        class="tab-item {{selectedCategory === item.id ? 'active' : ''}}"
+        wx:for="{{categories}}" 
+        wx:key="id"
+        bindtap="selectCategory"
+        data-id="{{item.id}}"
+      >
+        <image class="tab-icon" src="{{item.icon}}" mode="aspectFit"></image>
+        <text>{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 发布入口 -->
+  <view class="publish-bar" bindtap="goToPublish">
+    <view class="publish-hint">
+      <image src="/assets/icons/edit.png" mode="aspectFit"></image>
+      <text>分享校园新鲜事...</text>
+    </view>
+    <view class="publish-btn">
+      <text>发布</text>
+    </view>
+  </view>
+
+  <!-- 帖子列表 -->
+  <view class="post-list">
+    <view class="post-item" wx:for="{{posts}}" wx:key="id" bindtap="goToPostDetail" data-id="{{item.id}}">
+      <!-- 用户信息 -->
+      <view class="post-header">
+        <view class="user-info">
+          <image class="avatar" src="{{item.avatar || '/assets/icons/default-avatar.png'}}" mode="aspectFill"></image>
+          <view class="user-detail">
+            <text class="username">{{item.nickname}}</text>
+            <text class="post-time">{{item.timeAgo}}</text>
+          </view>
+        </view>
+        <view class="more-btn">
+          <image src="/assets/icons/more.png" mode="aspectFit"></image>
+        </view>
+      </view>
+
+      <!-- 帖子内容 -->
+      <view class="post-content">
+        <text class="post-text">{{item.content}}</text>
+        <!-- 图片网格 -->
+        <view class="image-grid" wx:if="{{item.images && item.images.length > 0}}">
+          <view class="image-item" wx:for="{{item.images}}" wx:for-item="img" wx:key="index">
+            <image src="{{img}}" mode="aspectFill" bindtap="previewImage" data-url="{{img}}"></image>
+          </view>
+        </view>
+      </view>
+
+      <!-- 标签 -->
+      <view class="post-tags" wx:if="{{item.tags && item.tags.length > 0}}">
+        <text class="tag" wx:for="{{item.tags}}" wx:key="index">#{{item}}</text>
+      </view>
+
+      <!-- 互动栏 -->
+      <view class="action-bar">
+        <view class="action-item {{item.liked ? 'active' : ''}}" bindtap="toggleLike" data-id="{{item.id}}" data-index="{{index}}">
+          <image src="{{item.liked ? '/assets/icons/liked.png' : '/assets/icons/like.png'}}" mode="aspectFit"></image>
+          <text>{{item.likes || 0}}</text>
+        </view>
+        <view class="action-item" bindtap="goToPostDetail" data-id="{{item.id}}">
+          <image src="/assets/icons/comment.png" mode="aspectFit"></image>
+          <text>{{item.comments || 0}}</text>
+        </view>
+        <view class="action-item" bindtap="sharePost" data-id="{{item.id}}">
+          <image src="/assets/icons/share.png" mode="aspectFit"></image>
+          <text>分享</text>
+        </view>
+      </view>
+
+      <!-- AI 智能标签 -->
+      <view class="ai-tags" wx:if="{{item.aiTags && item.aiTags.length > 0}}">
+        <view class="ai-tag-item">
+          <image src="/assets/icons/ai-badge.png" mode="aspectFit"></image>
+          <text>AI识别: {{item.aiTags}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore}}">
+    <text bindtap="loadMore">加载更多</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{posts.length === 0 && !loading}}">
+    <image class="empty-icon" src="/assets/icons/empty-community.png" mode="aspectFit"></image>
+    <text class="empty-text">暂无帖子</text>
+    <text class="empty-hint">成为第一个发布者吧</text>
+  </view>
+</view>
+
+<!-- 底部导航 -->
+<view class="tab-bar">
+  <view class="tab-item active">
+    <image src="/assets/icons/community-active.png" mode="aspectFit"></image>
+    <text>社区</text>
+  </view>
+  <view class="tab-item" bindtap="goToLostFound">
+    <image src="/assets/icons/lost.png" mode="aspectFit"></image>
+    <text>寻物</text>
+  </view>
+  <view class="tab-item publish" bindtap="goToPublish">
+    <image src="/assets/icons/add.png" mode="aspectFit"></image>
+  </view>
+  <view class="tab-item" bindtap="goToShopping">
+    <image src="/assets/icons/shopping.png" mode="aspectFit"></image>
+    <text>商城</text>
+  </view>
+  <view class="tab-item" bindtap="goToProfile">
+    <image src="/assets/icons/profile.png" mode="aspectFit"></image>
+    <text>我的</text>
+  </view>
+</view>

@@ -1,0 +1,150 @@
+<view class="page">
+
+  <!-- 消息列表 -->
+  <scroll-view
+    class="msg-list"
+    scroll-y
+    scroll-into-view="{{scrollIntoView}}"
+    enhanced
+    bounces
+    refresher-enabled
+  >
+    <!-- 欢迎页 -->
+    <view class="welcome" wx:if="{{messages.length === 0}}">
+      <view class="welcome-avatar">
+        <image src="/assets/icons/ai-avatar.png" mode="aspectFit" class="welcome-avatar-img" />
+      </view>
+      <text class="welcome-title">智校行 Smart1</text>
+      <text class="welcome-sub">智慧校园 AI 助手</text>
+      <text class="welcome-hint">试试这样问我：</text>
+
+      <view class="topic-grid">
+        <view
+          class="topic-chip"
+          wx:for="{{quickTopics}}"
+          wx:key="text"
+          bindtap="selectTopic"
+          data-text="{{item.text}}"
+        >
+          <text>{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 对话消息 -->
+    <view class="msgs">
+      <view
+        wx:for="{{messages}}"
+        wx:key="id"
+        class="msg-row {{item.role}}"
+      >
+        <!-- 头像 -->
+        <image
+          wx:if="{{item.role === 'assistant'}}"
+          class="avatar"
+          src="/assets/icons/ai-avatar.png"
+          mode="aspectFill"
+        />
+        <view wx:else class="avatar-spacer"></view>
+
+        <!-- 气泡 -->
+        <view class="bubble-wrap">
+          <view class="bubble {{item.role}} {{item.hasError ? 'error' : ''}}">
+            <!-- AI 加载中 -->
+            <view wx:if="{{item.isLoading && !item.content}}" class="loading-dots">
+              <text class="dot">.</text><text class="dot">.</text><text class="dot">.</text>
+            </view>
+            <!-- 内容 -->
+            <text wx:else class="msg-text" user-select="true">{{item.content}}</text>
+          </view>
+
+          <!-- 操作栏 -->
+          <view class="msg-bar" wx:if="{{!item.isLoading && item.role === 'assistant' && !item.hasError}}">
+            <view class="bar-btn" bindtap="onCopyMessage" data-content="{{item.content}}">
+              <image src="/assets/icons/copy.png" mode="aspectFit" class="bar-icon" />
+              <text>复制</text>
+            </view>
+            <view class="bar-btn" bindtap="onLikeMessage" data-id="{{item.id}}">
+              <image src="{{item.liked ? '/assets/icons/liked.png' : '/assets/icons/like.png'}}" mode="aspectFit" class="bar-icon" />
+              <text>{{item.likes || 0}}</text>
+            </view>
+          </view>
+
+          <!-- 快捷操作 -->
+          <view class="quick-row" wx:if="{{item.quickActions && item.quickActions.length > 0}}">
+            <view
+              class="quick-chip"
+              wx:for="{{item.quickActions}}"
+              wx:key="text"
+              wx:for-item="a"
+              bindtap="onQuickAction"
+              data-action="{{a}}"
+            >
+              <text>{{a.text}}</text>
+            </view>
+          </view>
+        </view>
+
+        <!-- 用户头像 -->
+        <image
+          wx:if="{{item.role === 'user'}}"
+          class="avatar"
+          src="{{userInfo.avatar || '/assets/icons/default-avatar.png'}}"
+          mode="aspectFill"
+        />
+        <view wx:else class="avatar-spacer"></view>
+      </view>
+
+      <!-- AI 思考中（最后一条在加载时） -->
+      <view class="msg-row assistant" wx:if="{{isStreaming && messages.length > 0 && messages[messages.length-1].isLoading && messages[messages.length-1].content}}">
+        <image class="avatar" src="/assets/icons/ai-avatar.png" mode="aspectFill" />
+        <view class="bubble-wrap">
+          <view class="bubble assistant">
+            <view class="loading-dots">
+              <text class="dot">.</text><text class="dot">.</text><text class="dot">.</text>
+            </view>
+          </view>
+        </view>
+        <view class="avatar-spacer"></view>
+      </view>
+
+      <!-- 滚动锚点 -->
+      <view class="input-spacer"></view>
+      <view id="msgBottom" />
+    </view>
+  </scroll-view>
+
+  <!-- 底部输入栏（固定在底部） -->
+  <view class="input-bar">
+    <view class="chat-controls">
+      <view class="ctrl-btn ghost" bindtap="onNewChat">
+        <text>新对话</text>
+      </view>
+      <view class="ctrl-btn danger" wx:if="{{isStreaming}}" bindtap="onStopThinking">
+        <text>终止思考</text>
+      </view>
+    </view>
+    <view class="input-inner">
+      <view class="input-field">
+        <textarea
+          class="chat-ta"
+          value="{{inputText}}"
+          placeholder="输入问题，AI 帮你解答..."
+          maxlength="1000"
+          confirm-type="send"
+          cursor-spacing="16"
+          adjust-position
+          bindinput="onInput"
+          bindconfirm="onConfirm"
+        />
+      </view>
+      <view
+        class="send-btn {{inputText.trim() ? 'active' : ''}}"
+        bindtap="onTapSend"
+      >
+        <image src="/assets/icons/send.png" mode="aspectFit" />
+      </view>
+    </view>
+  </view>
+
+</view>

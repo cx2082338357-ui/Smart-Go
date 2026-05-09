@@ -1,0 +1,243 @@
+<view class="container">
+  <!-- 角色切换 -->
+  <view class="role-tabs">
+    <view 
+      class="tab-item {{currentRole === 'buyer' ? 'active' : ''}}"
+      bindtap="switchRole"
+      data-role="buyer"
+    >
+      <text>我要下单</text>
+    </view>
+    <view 
+      class="tab-item {{currentRole === 'rider' ? 'active' : ''}}"
+      bindtap="switchRole"
+      data-role="rider"
+    >
+      <text>成为骑手</text>
+    </view>
+  </view>
+
+  <!-- 下单模式 -->
+  <view class="buyer-section" wx:if="{{currentRole === 'buyer'}}">
+    <!-- 配送地址 -->
+    <view class="address-card" bindtap="selectAddress">
+      <view class="address-icon">
+        <image src="/assets/icons/location.png" mode="aspectFit"></image>
+      </view>
+      <view class="address-info">
+        <view class="address-main" wx:if="{{address}}">
+          <text class="contact">{{address.contact}} {{address.phone}}</text>
+          <text class="detail">{{address.province}}{{address.city}}{{address.district}}{{address.detail}}</text>
+        </view>
+        <view class="address-empty" wx:if="{{!address}}">
+          <text>请选择收货地址</text>
+        </view>
+      </view>
+      <view class="address-arrow">
+        <image src="/assets/icons/right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="address-actions">
+      <text class="address-tip">点击地址可调用微信地址簿</text>
+      <text class="address-edit" bindtap="openAddressEditor">手动修改地址</text>
+    </view>
+
+    <!-- 商品选择 -->
+    <view class="goods-section">
+      <view class="goods-head">
+        <view class="section-title">选择商品</view>
+        <view class="goods-tools">
+          <text class="tool-btn" bindtap="refreshGoods">换一批</text>
+        </view>
+      </view>
+      <view class="goods-list">
+        <view class="goods-item" wx:for="{{quickGoods}}" wx:key="id">
+          <image class="goods-image" src="{{item.image}}" mode="aspectFill"></image>
+          <view class="goods-info">
+            <text class="goods-name">{{item.name}}</text>
+            <text class="goods-price">¥{{item.price}}</text>
+          </view>
+          <view class="goods-actions">
+            <view class="minus-btn" wx:if="{{item.count > 0}}" bindtap="decreaseGoods" data-id="{{item.id}}">-</view>
+            <text class="goods-count" wx:if="{{item.count > 0}}">{{item.count}}</text>
+            <view class="plus-btn" bindtap="increaseGoods" data-id="{{item.id}}">+</view>
+          </view>
+        </view>
+      </view>
+      <view class="load-more-wrap" wx:if="{{goodsHasMore}}">
+        <view class="load-more-btn" bindtap="loadMoreGoods">
+          <text>{{goodsLoading ? '加载中...' : '加载更多商品'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 备注 -->
+    <view class="remark-section">
+      <view class="section-title">备注</view>
+      <view class="remark-input">
+        <textarea 
+          placeholder="如：不要辣、送到宿舍楼下等"
+          maxlength="100"
+          bindinput="onRemarkInput"
+        ></textarea>
+      </view>
+    </view>
+
+    <!-- 配送信息 -->
+    <view class="delivery-info">
+      <view class="info-item">
+        <text class="label">配送费</text>
+        <text class="value">¥{{deliveryFee}}</text>
+      </view>
+      <view class="info-item">
+        <text class="label">预计送达</text>
+        <text class="value">约 {{estimatedTime}} 分钟</text>
+      </view>
+    </view>
+
+    <!-- 提交订单 -->
+    <view class="submit-section">
+      <view class="total-price">
+        <text class="label">合计：</text>
+        <text class="price">¥{{totalPrice}}</text>
+      </view>
+      <button class="submit-btn {{!canSubmit ? 'disabled' : ''}}" bindtap="submitOrder" disabled="{{!canSubmit}}">
+        <text>提交订单</text>
+      </button>
+    </view>
+  </view>
+
+  <!-- 骑手模式 -->
+  <view class="rider-section" wx:if="{{currentRole === 'rider'}}">
+    <!-- 未认证提示 -->
+    <view class="rider-certify-card" wx:if="{{!certified}}">
+      <image class="certify-icon" src="/assets/icons/rider.png" mode="aspectFit"></image>
+      <text class="certify-title">成为校园骑手</text>
+      <text class="certify-desc">利用课余时间配送校内订单，赚取零花钱！</text>
+      <view class="certify-benefits">
+        <view class="benefit-item">✓ 时间自由，随时接单</view>
+        <view class="benefit-item">✓ 按单结算，收入日结</view>
+        <view class="benefit-item">✓ 校内配送，安全便捷</view>
+      </view>
+      <button class="certify-btn" bindtap="switchRole" data-role="rider" loading="{{applying}}">
+        {{applying ? '申请中...' : '立即申请认证'}}
+      </button>
+    </view>
+
+    <!-- 已认证骑手界面 -->
+    <block wx:if="{{certified}}">
+    <!-- 骑手状态 -->
+    <view class="rider-status-card">
+      <view class="status-toggle">
+        <text class="status-label {{isOnline ? 'online' : ''}}">{{isOnline ? '在线接单中' : '离线'}}</text>
+        <switch checked="{{isOnline}}" bindchange="toggleOnline" color="#fa8c16"/>
+      </view>
+      <view class="rider-stats">
+        <view class="stat-item">
+          <text class="stat-value">{{todayOrders}}</text>
+          <text class="stat-label">今日完成</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">¥{{todayEarning}}</text>
+          <text class="stat-label">今日收入</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{rating}}</text>
+          <text class="stat-label">评分</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 接单列表 -->
+    <view class="order-list">
+      <view class="list-header">
+        <view class="list-title">可接订单</view>
+        <view class="refresh-btn" bindtap="refreshOrders">
+          <text class="{{orderRefreshing ? 'spinning' : ''}}">⟳</text>
+          <text>刷新</text>
+        </view>
+      </view>
+      <view class="order-item" wx:for="{{availableOrders}}" wx:key="id">
+        <view class="order-header">
+          <text class="pickup-location">{{item.pickupLocation}}</text>
+          <text class="distance">{{item.distance}}m</text>
+        </view>
+        <view class="order-detail">
+          <text class="delivery-location">{{item.deliveryLocation}}</text>
+          <text class="goods-summary">{{item.goodsSummary}}</text>
+        </view>
+        <view class="order-footer">
+          <view class="order-price">
+            <text class="price">¥{{item.deliveryFee}}</text>
+            <text class="tip">配送费+¥{{item.tip}}</text>
+          </view>
+          <button class="accept-btn" bindtap="acceptOrder" data-id="{{item.id}}">接单</button>
+        </view>
+      </view>
+      <view class="empty-orders" wx:if="{{availableOrders.length === 0 && isOnline}}">
+        <text>暂无可接订单</text>
+      </view>
+      <view class="offline-tip" wx:if="{{!isOnline}}">
+        <text>开启在线接单，发现更多订单</text>
+      </view>
+    </view>
+    </block>
+  </view>
+</view>
+
+<!-- 地址编辑弹窗 -->
+<view class="pay-modal" wx:if="{{showAddressEditor}}">
+  <view class="modal-mask" bindtap="closeAddressEditor"></view>
+  <view class="modal-content">
+    <view class="modal-header">
+      <text>修改收货地址</text>
+      <view class="close-btn" bindtap="closeAddressEditor">
+        <image src="/assets/icons/close.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="modal-body">
+      <view class="address-form">
+        <input class="address-input" placeholder="联系人" value="{{addressForm.contact}}" data-field="contact" bindinput="onAddressInput" />
+        <input class="address-input" placeholder="手机号" type="number" maxlength="11" value="{{addressForm.phone}}" data-field="phone" bindinput="onAddressInput" />
+        <input class="address-input" placeholder="省份" value="{{addressForm.province}}" data-field="province" bindinput="onAddressInput" />
+        <input class="address-input" placeholder="城市" value="{{addressForm.city}}" data-field="city" bindinput="onAddressInput" />
+        <input class="address-input" placeholder="区县" value="{{addressForm.district}}" data-field="district" bindinput="onAddressInput" />
+        <textarea class="address-textarea" placeholder="详细地址（宿舍楼/门牌号）" value="{{addressForm.detail}}" data-field="detail" bindinput="onAddressInput"></textarea>
+      </view>
+      <button class="pay-btn" bindtap="saveAddress">保存地址</button>
+    </view>
+  </view>
+</view>
+
+<!-- 支付弹窗 -->
+<view class="pay-modal" wx:if="{{showPayModal}}">
+  <view class="modal-mask" bindtap="closePayModal"></view>
+  <view class="modal-content">
+    <view class="modal-header">
+      <text>扫码支付</text>
+      <view class="close-btn" bindtap="closePayModal">
+        <image src="/assets/icons/close.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="modal-body">
+      <view class="pay-amount">
+        <text class="amount">¥{{totalPrice}}</text>
+        <text class="amount-tip">长按保存收款码，使用微信扫一扫支付</text>
+      </view>
+      <view class="qrcode-wrap">
+        <image
+          class="qrcode-img"
+          src="/assets/icons/wechat-pay-qrcode.jpg"
+          mode="aspectFit"
+          show-menu-by-longpress
+        ></image>
+        <view class="qrcode-hint">截图 → 打开微信扫一扫 → 相册选图</view>
+      </view>
+      <view class="paid-tip">
+        <text class="paid-icon">✓</text>
+        <text>支付完成后点击下方按钮</text>
+      </view>
+      <button class="pay-btn" bindtap="onPaidConfirm">我已支付</button>
+    </view>
+  </view>
+</view>

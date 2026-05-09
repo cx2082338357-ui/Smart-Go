@@ -1,0 +1,61 @@
+<view class="container">
+  <!-- 地图 -->
+  <map
+    class="campus-map"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    scale="{{scale}}"
+    markers="{{markers}}"
+    bindmarkertap="onMarkerTap"
+    show-location
+    enable-rotate
+    enable-overlooking
+  ></map>
+
+  <!-- 地点列表 -->
+  <view class="poi-list">
+    <view class="poi-head">
+      <view class="poi-title">校园地点</view>
+      <view class="poi-subtitle">点击地点卡片可一键导航</view>
+    </view>
+    <scroll-view scroll-x class="poi-scroll">
+      <view 
+        class="poi-item"
+        wx:for="{{pois}}"
+        wx:key="id"
+        bindtap="goToPoi"
+        data-index="{{index}}"
+      >
+        <image class="poi-cover" src="{{item.photo}}" mode="aspectFill"></image>
+        <view class="poi-content">
+          <text class="poi-name">{{item.name}}</text>
+          <text class="poi-desc">{{item.desc}}</text>
+          <view class="poi-action">去这里</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 快捷导航 -->
+  <view class="quick-nav">
+    <view class="nav-title">快捷导航</view>
+    <view class="nav-grid">
+      <view class="nav-item" bindtap="showTeachingBuildingOptions">
+        <image src="/assets/icons/school.png" mode="aspectFit"></image>
+        <text>教学楼</text>
+      </view>
+      <view class="nav-item" bindtap="goToLibrary">
+        <image src="/assets/icons/library.png" mode="aspectFit"></image>
+        <text>图书馆</text>
+      </view>
+      <view class="nav-item" bindtap="showCanteenOptions">
+        <image src="/assets/icons/food.png" mode="aspectFit"></image>
+        <text>食堂</text>
+      </view>
+      <view class="nav-item" bindtap="goToGym">
+        <image src="/assets/icons/sports.png" mode="aspectFit"></image>
+        <text>体育馆</text>
+      </view>
+    </view>
+  </view>
+</view>

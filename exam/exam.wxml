@@ -1,0 +1,80 @@
+<view class="container">
+  <!-- 统计卡片 -->
+  <view class="stats-card">
+    <view class="stat-item">
+      <text class="stat-value">{{stats.total}}</text>
+      <text class="stat-label">考试总数</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-value">{{stats.completed}}</text>
+      <text class="stat-label">已结束</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <text class="stat-value warning">{{stats.upcoming}}</text>
+      <text class="stat-label">待考试</text>
+    </view>
+  </view>
+
+  <!-- 考试列表 -->
+  <view class="exam-list" wx:if="{{examList.length > 0}}">
+    <view 
+      class="exam-item {{item.status === 'completed' ? 'completed' : ''}}" 
+      wx:for="{{examList}}" 
+      wx:key="id"
+      bindtap="showExamDetail"
+      data-exam="{{item}}"
+    >
+      <view class="exam-header">
+        <view class="exam-info">
+          <text class="course-name">{{item.courseName}}</text>
+          <view class="exam-meta">
+            <text class="exam-type tag">{{item.examType}}</text>
+            <text class="credits">{{item.credits}}学分</text>
+          </view>
+        </view>
+        <view class="exam-status" style="background: {{item.statusColor}};">
+          <text>{{item.statusText}}</text>
+        </view>
+      </view>
+      
+      <view class="exam-details">
+        <view class="detail-row">
+          <image src="/assets/icons/time.png" mode="aspectFit"></image>
+          <text>{{item.examDateStr}} {{item.examTime}}</text>
+        </view>
+        <view class="detail-row">
+          <image src="/assets/icons/location.png" mode="aspectFit"></image>
+          <text>{{item.location}}</text>
+        </view>
+      </view>
+
+      <view class="exam-actions" wx:if="{{item.status !== 'completed'}}">
+        <view class="action-btn" bindtap="addToCalendar" catchtap="addToCalendar" data-exam="{{item}}">
+          <image src="/assets/icons/schedule.png" mode="aspectFit"></image>
+          <text>添加到日历</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{examList.length === 0 && !loading}}">
+    <image class="empty-icon" src="/assets/icons/exam.png" mode="aspectFit"></image>
+    <text class="empty-text">暂无考试安排</text>
+    <text class="empty-hint">好好复习，考试加油！</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <!-- 返回按钮 -->
+  <view class="back-btn" bindtap="goToSchedule">
+    <image src="/assets/icons/left.png" mode="aspectFit"></image>
+    <text>返回课表</text>
+  </view>
+</view>

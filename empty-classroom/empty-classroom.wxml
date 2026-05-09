@@ -1,0 +1,178 @@
+<view class="container">
+  <!-- 统计概览 -->
+  <view class="stats-overview">
+    <view class="building-focus" wx:if="{{focusOnly}}">
+      <text class="building-focus-title">本楼统计</text>
+      <text class="building-focus-name">{{selectedBuilding}}</text>
+    </view>
+    <view class="stat-card available">
+      <view class="stat-icon">
+        <text class="icon-text">✓</text>
+      </view>
+      <view class="stat-info">
+        <text class="stat-value">{{stats.available}}</text>
+        <text class="stat-label">有空余</text>
+      </view>
+    </view>
+    <view class="stat-card busy">
+      <view class="stat-icon">
+        <text class="icon-text">×</text>
+      </view>
+      <view class="stat-info">
+        <text class="stat-value">{{stats.busy}}</text>
+        <text class="stat-label">已满</text>
+      </view>
+    </view>
+    <view class="stat-card total">
+      <view class="stat-icon">
+        <text class="icon-text">{{stats.total}}</text>
+      </view>
+      <view class="stat-info">
+        <text class="stat-value">{{stats.total}}</text>
+        <text class="stat-label">总计</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 教学楼筛选 -->
+  <view class="filter-bar" wx:if="{{!focusOnly}}">
+    <scroll-view class="filter-scroll" scroll-x>
+      <view 
+        class="filter-item {{selectedBuilding === '' ? 'active' : ''}}"
+        bindtap="selectBuilding"
+        data-name=""
+      >
+        <text>全部</text>
+      </view>
+      <view 
+        class="filter-item {{selectedBuilding === item ? 'active' : ''}}"
+        wx:for="{{buildings}}"
+        wx:key="index"
+        bindtap="selectBuilding"
+        data-name="{{item}}"
+      >
+        <text>{{item}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="filter-bar filter-extra">
+    <view class="filter-extra-left">
+      <text class="update-text" wx:if="{{lastUpdatedAt}}">更新于 {{lastUpdatedAt}}</text>
+    </view>
+    <view class="filter-extra-right">
+      <view class="sort-chip {{sortMode==='rate' ? 'active' : ''}}" bindtap="toggleSort" data-mode="rate">按空位率</view>
+      <view class="sort-chip {{sortMode==='count' ? 'active' : ''}}" bindtap="toggleSort" data-mode="count">按空位数</view>
+    </view>
+  </view>
+
+  <!-- 教室列表 -->
+  <scroll-view class="classroom-list" scroll-y>
+    <!-- 空余充足 -->
+    <view class="section-header available-header" wx:if="{{filteredClassrooms.available.length > 0}}">
+      <view class="section-dot"></view>
+      <text class="section-title">空余充足</text>
+      <text class="section-count">{{filteredClassrooms.available.length}}个</text>
+    </view>
+    <view 
+      class="classroom-item available-card"
+      wx:for="{{filteredClassrooms.available}}"
+      wx:key="index"
+      bindtap="navigateToBuilding"
+      data-name="{{item.name}}"
+    >
+      <view class="item-left">
+        <view class="room-icon available">
+          <text>{{item.statusIcon}}</text>
+        </view>
+        <view class="room-info">
+          <text class="room-name">{{item.name}}</text>
+          <text class="room-detail">{{item.available || 0}}个空位 / 共{{item.total || 0}}个座位</text>
+        </view>
+      </view>
+      <view class="item-right">
+        <view class="rate-circle available">
+          <text class="rate-value">{{item.availableRate}}%</text>
+        </view>
+        <view class="nav-arrow">
+          <text>></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空余一般 -->
+    <view class="section-header limited-header" wx:if="{{filteredClassrooms.limited.length > 0}}">
+      <view class="section-dot"></view>
+      <text class="section-title">空余一般</text>
+      <text class="section-count">{{filteredClassrooms.limited.length}}个</text>
+    </view>
+    <view 
+      class="classroom-item limited-card"
+      wx:for="{{filteredClassrooms.limited}}"
+      wx:key="index"
+      bindtap="navigateToBuilding"
+      data-name="{{item.name}}"
+    >
+      <view class="item-left">
+        <view class="room-icon limited">
+          <text>{{item.statusIcon}}</text>
+        </view>
+        <view class="room-info">
+          <text class="room-name">{{item.name}}</text>
+          <text class="room-detail">{{item.available || 0}}个空位 / 共{{item.total || 0}}个座位</text>
+        </view>
+      </view>
+      <view class="item-right">
+        <view class="rate-circle limited">
+          <text class="rate-value">{{item.availableRate}}%</text>
+        </view>
+        <view class="nav-arrow">
+          <text>></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 暂无空余 -->
+    <view class="section-header busy-header" wx:if="{{filteredClassrooms.busy.length > 0}}">
+      <view class="section-dot"></view>
+      <text class="section-title">暂无空余</text>
+      <text class="section-count">{{filteredClassrooms.busy.length}}个</text>
+    </view>
+    <view 
+      class="classroom-item busy-card"
+      wx:for="{{filteredClassrooms.busy}}"
+      wx:key="index"
+      bindtap="navigateToBuilding"
+      data-name="{{item.name}}"
+    >
+      <view class="item-left">
+        <view class="room-icon busy">
+          <text>{{item.statusIcon}}</text>
+        </view>
+        <view class="room-info">
+          <text class="room-name">{{item.name}}</text>
+          <text class="room-detail">座位已满，建议另选其他教室</text>
+        </view>
+      </view>
+      <view class="item-right">
+        <view class="rate-circle busy">
+          <text class="rate-value">{{item.availableRate}}%</text>
+        </view>
+        <view class="nav-arrow disabled">
+          <text>></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{classrooms.length === 0 && !loading}}">
+      <image class="empty-icon" src="/assets/icons/empty-schedule.png" mode="aspectFit"></image>
+      <text class="empty-text">暂无教室数据</text>
+    </view>
+  </scroll-view>
+
+  <!-- 加载状态 -->
+  <view class="loading-mask" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+  </view>
+</view>

@@ -1,0 +1,76 @@
+<view class="container">
+  <!-- 配送状态卡片 -->
+  <view class="status-card">
+    <view class="status-icon {{deliveryStatus === 'completed' ? 'done' : ''}}">
+      <image src="/assets/icons/delivery.png" mode="aspectFit"></image>
+    </view>
+    <view class="status-info">
+      <text class="status-title">{{order ? (deliveryStatus === 'completed' ? '已送达' : '配送中') : '配送信息加载中'}}</text>
+      <text class="status-eta" wx:if="{{eta && deliveryStatus !== 'completed'}}">{{eta}}</text>
+    </view>
+  </view>
+
+  <!-- 骑手信息 -->
+  <view class="rider-card" wx:if="{{riderName}}">
+    <view class="rider-avatar">
+      <image src="/assets/icons/rider.png" mode="aspectFit"></image>
+    </view>
+    <view class="rider-info">
+      <text class="rider-name">{{riderName}}</text>
+      <text class="rider-desc">配送骑手</text>
+    </view>
+    <view class="call-btn" bindtap="callRider">
+      <image src="/assets/icons/phone.png" mode="aspectFit"></image>
+      <text>联系骑手</text>
+    </view>
+  </view>
+
+  <!-- 配送路线 -->
+  <view class="route-card">
+    <view class="route-item pickup">
+      <view class="route-dot"></view>
+      <view class="route-content">
+        <text class="route-label">取货地点</text>
+        <text class="route-value">{{order.pickupLocation || '校内超市'}}</text>
+      </view>
+    </view>
+    <view class="route-line"></view>
+    <view class="route-item delivery">
+      <view class="route-dot"></view>
+      <view class="route-content">
+        <text class="route-label">收货地点</text>
+        <text class="route-value">{{order.deliveryLocation || '学生宿舍'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 配送进度 -->
+  <view class="progress-card">
+    <text class="card-title">配送进度</text>
+    <view class="progress-steps">
+      <view class="step-item {{step.done ? 'done' : ''}} {{step.current ? 'current' : ''}}" wx:for="{{steps}}" wx:key="status">
+        <view class="step-dot">
+          <image wx:if="{{step.done && !step.current}}" src="/assets/icons/completed.png" mode="aspectFit"></image>
+          <view wx:elif="{{step.current}}" class="step-pulse"></view>
+        </view>
+        <view class="step-content">
+          <text class="step-text">{{step.text}}</text>
+          <text class="step-time">{{step.time}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 订单信息 -->
+  <view class="order-card" wx:if="{{order}}">
+    <text class="card-title">订单信息</text>
+    <view class="order-row">
+      <text class="order-label">商品</text>
+      <text class="order-value">{{order.goodsSummary}}</text>
+    </view>
+    <view class="order-row">
+      <text class="order-label">配送费</text>
+      <text class="order-value">¥{{order.deliveryFee}}</text>
+    </view>
+  </view>
+</view>

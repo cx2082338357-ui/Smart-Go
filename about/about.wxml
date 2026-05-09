@@ -1,0 +1,64 @@
+<view class="container">
+  <!-- Logo 和名称 -->
+  <view class="header">
+    <view class="logo">
+      <image src="/assets/icons/app-logo.png" mode="aspectFit"></image>
+    </view>
+    <text class="app-name">智慧校园</text>
+    <text class="version">v{{version}}</text>
+  </view>
+
+  <!-- 简介 -->
+  <view class="intro-section">
+    <text class="intro-text">
+      智慧校园是一款面向高校学生的校园服务小程序，基于微调大语言模型，为学生提供智能化的校园服务体验。
+    </text>
+  </view>
+
+  <!-- 功能特点 -->
+  <view class="features-section">
+    <view class="section-title">核心功能</view>
+    <view class="features-grid">
+      <view class="feature-item" wx:for="{{features}}" wx:key="title">
+        <view class="feature-icon">
+          <image src="{{item.icon}}" mode="aspectFit"></image>
+        </view>
+        <text class="feature-title">{{item.title}}</text>
+        <text class="feature-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 技术栈 -->
+  <view class="tech-section">
+    <view class="section-title">技术架构</view>
+    <view class="tech-list">
+      <view class="tech-item" wx:for="{{techStack}}" wx:key="name">
+        <text class="tech-name">{{item.name}}</text>
+        <text class="tech-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系方式 -->
+  <view class="contact-section">
+    <view class="section-title">联系我们</view>
+    <view class="contact-list">
+      <view class="contact-item" bindtap="copyText" data-text="{{item.value}}" wx:for="{{contacts}}" wx:key="label">
+        <view class="contact-icon">
+          <image src="{{item.icon}}" mode="aspectFit"></image>
+        </view>
+        <view class="contact-content">
+          <text class="contact-label">{{item.label}}</text>
+          <text class="contact-value">{{item.value}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部声明 -->
+  <view class="footer">
+    <text>Copyright © 2024 智慧校园团队</text>
+    <text>All Rights Reserved.</text>
+  </view>
+</view>
