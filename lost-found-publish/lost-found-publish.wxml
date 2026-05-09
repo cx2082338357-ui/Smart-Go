@@ -1,0 +1,74 @@
+<view class="container">
+  <!-- 表单 -->
+  <view class="form">
+    <!-- 标题 -->
+    <view class="form-item">
+      <view class="form-label">标题</view>
+      <input 
+        type="text"
+        placeholder="请输入标题（至少5个字）"
+        maxlength="50"
+        bindinput="onTitleInput"
+      />
+    </view>
+
+    <!-- 详细描述 -->
+    <view class="form-item">
+      <view class="form-label">详细描述</view>
+      <textarea 
+        class="textarea"
+        placeholder="请详细描述物品特征，帮助他人识别"
+        maxlength="500"
+        bindinput="onDescriptionInput"
+      ></textarea>
+    </view>
+
+    <!-- 地点 -->
+    <view class="form-item">
+      <view class="form-label">地点</view>
+      <input 
+        type="text"
+        placeholder="请输入丢失/捡到地点"
+        maxlength="100"
+        bindinput="onLocationInput"
+      />
+    </view>
+
+    <!-- 联系方式 -->
+    <view class="form-item">
+      <view class="form-label">联系方式</view>
+      <input 
+        type="text"
+        placeholder="请输入手机号（选填）"
+        maxlength="20"
+        bindinput="onContactInput"
+      />
+    </view>
+
+    <!-- 图片 -->
+    <view class="form-item">
+      <view class="form-label">图片</view>
+      <view class="image-list">
+        <view class="image-item" wx:for="{{images}}" wx:key="index">
+          <image src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}"></image>
+          <view class="remove-btn" bindtap="removeImage" data-index="{{index}}">×</view>
+        </view>
+        <view class="add-image" bindtap="chooseImage" wx:if="{{images.length < 9}}">
+          <text>+</text>
+          <text>添加图片</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 提示 -->
+    <view class="tip">
+      <text>温馨提示：请确保信息真实有效，便于他人联系您</text>
+    </view>
+
+    <!-- 提交按钮 -->
+    <button class="submit-btn {{loading ? 'loading' : ''}}" bindtap="submit" disabled="{{loading}}">
+      <text wx:if="{{!loading}}">发布</text>
+      <text wx:if="{{loading}}">发布中...</text>
+    </button>
+  </view>
+</view>

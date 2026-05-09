@@ -1,0 +1,96 @@
+<view class="container">
+  <!-- 周次选择器 -->
+  <view class="week-selector">
+    <view class="week-nav">
+      <view class="nav-btn" bindtap="prevWeek">
+        <image src="/assets/icons/left.png" mode="aspectFit"></image>
+      </view>
+      <view class="week-display">
+        <text class="week-label">第{{currentWeek}}周</text>
+        <text class="week-date">{{weekDateRange}}</text>
+      </view>
+      <view class="nav-btn" bindtap="nextWeek">
+        <image src="/assets/icons/right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 周日期选择 -->
+  <view class="day-selector">
+    <scroll-view class="day-scroll" scroll-x>
+      <view 
+        class="day-item {{selectedDay === index ? 'active' : ''}}" 
+        wx:for="{{weekDays}}" 
+        wx:key="index"
+        bindtap="selectDay"
+        data-index="{{index}}"
+      >
+        <text class="day-name">{{item.name}}</text>
+        <text class="day-date">{{item.date}}</text>
+        <view class="has-class" wx:if="{{item.hasClass}}"></view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 课程列表 -->
+  <view class="course-list" wx:if="{{dayCourses.length > 0}}">
+    <view class="course-item" wx:for="{{dayCourses}}" wx:key="id">
+      <view class="course-time-bar" style="background: {{item.color}};"></view>
+      <view class="course-content">
+        <view class="course-header">
+          <text class="course-name">{{item.courseName}}</text>
+          <text class="course-type tag {{item.type === '必修' ? 'tag-primary' : 'tag-success'}}">{{item.type}}</text>
+        </view>
+        <view class="course-details">
+          <view class="detail-item">
+            <image src="/assets/icons/location.png" mode="aspectFit"></image>
+            <text>{{item.location}}</text>
+          </view>
+          <view class="detail-item">
+            <image src="/assets/icons/time.png" mode="aspectFit"></image>
+            <text>{{item.startTime}}-{{item.endTime}}</text>
+          </view>
+          <view class="detail-item" wx:if="{{item.teacher}}">
+            <image src="/assets/icons/schedule.png" mode="aspectFit"></image>
+            <text>{{item.teacher}}</text>
+          </view>
+        </view>
+        <view class="course-actions">
+          <view class="action-btn {{item.hasReminder ? 'active' : ''}}" bindtap="toggleReminder" data-index="{{index}}">
+            <image src="{{item.hasReminder ? '/assets/icons/bell-active.png' : '/assets/icons/bell.png'}}" mode="aspectFit"></image>
+            <text>{{item.hasReminder ? '已提醒' : '提醒'}}</text>
+          </view>
+          <view class="action-btn" bindtap="navigateToClass" data-course="{{item}}">
+            <image src="/assets/icons/navigation.png" mode="aspectFit"></image>
+            <text>导航</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{dayCourses.length === 0 && !loading}}">
+    <image class="empty-state-icon" src="/assets/icons/empty-schedule.png" mode="aspectFit"></image>
+    <text class="empty-state-text">今日无课程安排</text>
+    <text class="empty-hint">好好休息或去图书馆自习吧</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+</view>
+
+<!-- 侧边快捷操作 -->
+<view class="quick-actions-fab">
+  <view class="fab-item" bindtap="goToWeekView">
+    <image src="/assets/icons/schedule.png" mode="aspectFit"></image>
+    <text>周视图</text>
+  </view>
+  <view class="fab-item" bindtap="goToExamSchedule">
+    <image src="/assets/icons/exam.png" mode="aspectFit"></image>
+    <text>考试安排</text>
+  </view>
+</view>

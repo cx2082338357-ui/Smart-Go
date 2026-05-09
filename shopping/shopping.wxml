@@ -1,0 +1,74 @@
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input">
+      <image src="/assets/icons/search.png" mode="aspectFit"></image>
+      <input placeholder="搜索商品..." bindconfirm="onSearch" confirm-type="search"/>
+    </view>
+  </view>
+
+  <!-- 分类导航 -->
+  <view class="category-nav">
+    <scroll-view class="category-scroll" scroll-x>
+      <view 
+        class="category-item {{selectedCategory === item.id ? 'active' : ''}}"
+        wx:for="{{categories}}" 
+        wx:key="id"
+        bindtap="selectCategory"
+        data-id="{{item.id}}"
+      >
+        <text class="category-icon">{{item.emoji}}</text>
+        <text>{{item.name}}</text>
+        <text class="category-count" wx:if="{{item.count}}">{{item.count}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 商品列表 -->
+  <scroll-view class="product-scroll" scroll-y bindscrolltolower="loadMore">
+    <view class="product-grid">
+      <view class="product-item" wx:for="{{products}}" wx:key="id">
+        <view class="product-card" bindtap="goToDetail" data-id="{{item.id}}">
+          <image class="product-image" src="{{item.image}}" mode="aspectFill">
+            <view class="product-tag" wx:if="{{item.discount && item.discount < 10}}">{{item.discount}}折</view>
+          </image>
+          <view class="product-info">
+            <text class="product-name">{{item.name}}</text>
+            <view class="product-bottom">
+              <view class="product-price">
+                <text class="price-symbol">¥</text>
+                <text class="price-value">{{item.price}}</text>
+                <text class="price-original" wx:if="{{item.originalPrice && item.originalPrice != item.price}}">¥{{item.originalPrice}}</text>
+              </view>
+              <text class="product-sales">已售{{item.salesText}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="add-cart-btn" bindtap="addToCart" data-product="{{item}}">
+          <text class="add-icon">+</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore}}">
+      <view class="loading" wx:if="{{loading}}">
+        <view class="loading-spinner"></view>
+        <text>加载中...</text>
+      </view>
+      <text wx:else>上拉加载更多</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{products.length === 0 && !loading}}">
+      <text class="empty-icon">🛒</text>
+      <text class="empty-text">{{networkError ? '无法连接服务端：请勾选「不校验合法域名」；cloudflare tunnel 需同时启动后端与隧道' : '暂无商品'}}</text>
+    </view>
+  </scroll-view>
+</view>
+
+<!-- 底部购物车悬浮按钮 -->
+<view class="cart-float" bindtap="goToCart">
+  <text class="cart-icon">🛒</text>
+  <view class="cart-badge" wx:if="{{cartCount > 0}}">{{cartCount > 99 ? '99+' : cartCount}}</view>
+</view>

@@ -1,0 +1,104 @@
+<view class="container">
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+
+  <!-- 商品内容 -->
+  <block wx:if="{{!loading && product}}">
+    <!-- 商品图片 -->
+    <swiper class="product-swiper" indicator-dots autoplay>
+      <swiper-item wx:for="{{product.images}}" wx:key="index">
+        <image src="{{item}}" mode="aspectFill" bindtap="previewImage" data-url="{{item}}"></image>
+      </swiper-item>
+    </swiper>
+
+    <!-- 价格信息 -->
+    <view class="price-section">
+      <view class="price-info">
+        <text class="current-price">
+          <text class="price-symbol">¥</text>
+          <text class="price-value">{{product.price}}</text>
+        </text>
+        <text class="original-price" wx:if="{{product.originalPrice && product.originalPrice != product.price}}">¥{{product.originalPrice}}</text>
+        <view class="discount-tag" wx:if="{{product.discount && product.discount < 10}}">{{product.discount}}折</view>
+      </view>
+      <view class="sales-info">
+        <text class="sales">已售 {{product.salesText}}</text>
+        <text class="stock">库存 {{product.stock}}</text>
+      </view>
+    </view>
+
+    <!-- 商品名称 -->
+    <view class="product-section">
+      <view class="product-name">{{product.fullName || product.name}}</view>
+      <view class="product-desc" wx:if="{{product.description}}">{{product.description}}</view>
+    </view>
+
+    <!-- 店铺信息 -->
+    <view class="shop-section">
+      <view class="shop-info">
+        <image class="shop-icon" src="/assets/icons/shop.png" mode="aspectFit"></image>
+        <view class="shop-detail">
+          <text class="shop-name">{{product.shopName}}</text>
+          <text class="shop-location" wx:if="{{product.location}}">{{product.location}}</text>
+        </view>
+      </view>
+      <view class="tmall-badge" wx:if="{{product.isTmall}}">天猫旗舰店</view>
+    </view>
+
+    <!-- 配送信息 -->
+    <view class="delivery-section">
+      <view class="delivery-item">
+        <text class="delivery-icon">🏠</text>
+        <text>校内配送</text>
+      </view>
+      <view class="delivery-item">
+        <text class="delivery-icon">🚚</text>
+        <text>预计30分钟送达</text>
+      </view>
+    </view>
+
+    <!-- 商品详情 -->
+    <view class="detail-section">
+      <view class="section-title">商品详情</view>
+      <view class="detail-content">
+        <text>{{product.description}}</text>
+      </view>
+    </view>
+
+    <!-- 相似商品 -->
+    <view class="similar-section" wx:if="{{similarProducts.length > 0}}">
+      <view class="section-title">相似推荐</view>
+      <scroll-view class="similar-scroll" scroll-x>
+        <view class="similar-item" wx:for="{{similarProducts}}" wx:key="id" bindtap="goToProduct" data-id="{{item.id}}">
+          <image class="similar-image" src="{{item.image}}" mode="aspectFill"></image>
+          <text class="similar-name">{{item.name}}</text>
+          <text class="similar-price">¥{{item.price}}</text>
+        </view>
+      </scroll-view>
+    </view>
+  </block>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!loading && !product}}">
+    <text>商品不存在</text>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="bottom-bar" wx:if="{{!loading && product}}">
+    <view class="quantity-section">
+      <text class="quantity-label">数量</text>
+      <view class="quantity-control">
+        <view class="qty-btn" bindtap="decreaseQty">-</view>
+        <text class="qty-value">{{quantity}}</text>
+        <view class="qty-btn" bindtap="increaseQty">+</view>
+      </view>
+    </view>
+    <view class="action-buttons">
+      <view class="action-btn cart-btn" bindtap="addToCart">加入购物车</view>
+      <view class="action-btn buy-btn" bindtap="buyNow">立即购买</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,348 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 32rpx;
+}
+
+/* 概览卡片 */
+.overview-card {
+  background: linear-gradient(135deg, #52c41a, #73d13d);
+  padding: 32rpx;
+  color: #fff;
+  margin-bottom: 24rpx;
+}
+
+.gpa-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.gpa-circle {
+  width: 180rpx;
+  height: 180rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 32rpx;
+}
+
+.gpa-value {
+  font-size: 48rpx;
+  font-weight: 700;
+}
+
+.gpa-label {
+  font-size: 24rpx;
+  opacity: 0.8;
+  margin-top: 8rpx;
+}
+
+.gpa-details {
+  flex: 1;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-size: 28rpx;
+  opacity: 0.8;
+}
+
+.detail-value {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+/* 学分进度 */
+.credit-progress {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 20rpx;
+  border-radius: 12rpx;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.progress-title {
+  font-size: 28rpx;
+}
+
+.progress-percent {
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.progress-bar {
+  height: 12rpx;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 6rpx;
+  overflow: hidden;
+  margin-bottom: 8rpx;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #fff;
+  border-radius: 6rpx;
+  transition: width 0.5s;
+}
+
+.progress-info {
+  font-size: 24rpx;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* 学期选择 */
+.semester-selector {
+  background: #fff;
+  padding: 20rpx 0;
+  margin-bottom: 24rpx;
+}
+
+.semester-scroll {
+  white-space: nowrap;
+  padding: 0 16rpx;
+}
+
+.semester-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 140rpx;
+  padding: 16rpx 24rpx;
+  margin: 0 8rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  transition: all 0.3s;
+}
+
+.semester-item.active {
+  background: linear-gradient(135deg, #52c41a, #73d13d);
+  color: #fff;
+}
+
+.semester-name {
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.semester-gpa {
+  font-size: 22rpx;
+  opacity: 0.8;
+  margin-top: 4rpx;
+}
+
+/* 成绩列表 */
+.score-list {
+  padding: 0 24rpx;
+}
+
+.score-item {
+  background: #fff;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.score-rank {
+  width: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.score-content {
+  flex: 1;
+  padding: 20rpx;
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.course-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  flex: 1;
+}
+
+.course-credit {
+  font-size: 24rpx;
+  color: #999;
+  margin-left: 12rpx;
+}
+
+.score-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.score-grade {
+  display: flex;
+  align-items: baseline;
+}
+
+.grade-value {
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-right: 8rpx;
+}
+
+.grade-label {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.score-meta {
+  display: flex;
+  gap: 12rpx;
+}
+
+.score-type {
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+}
+
+.type-required {
+  background: rgba(24, 144, 255, 0.1);
+  color: #1890ff;
+}
+
+.type-elective {
+  background: rgba(82, 196, 26, 0.1);
+  color: #52c41a;
+}
+
+.score-semester {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.score-chart {
+  height: 8rpx;
+  background: #f0f0f0;
+  border-radius: 4rpx;
+  overflow: hidden;
+}
+
+.chart-bar {
+  height: 100%;
+  border-radius: 4rpx;
+  transition: width 0.5s;
+}
+
+/* 成绩分析 */
+.analysis-card {
+  margin: 24rpx;
+}
+
+.analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+}
+
+.analysis-item {
+  text-align: center;
+  padding: 20rpx;
+  background: #f8f8f8;
+  border-radius: 12rpx;
+}
+
+.analysis-value {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #333;
+  display: block;
+}
+
+.analysis-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+  display: block;
+}
+
+/* 成绩分布图 */
+.score-distribution {
+  margin-top: 24rpx;
+}
+
+.distribution-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.distribution-bars {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 160rpx;
+}
+
+.bar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bar-wrapper {
+  width: 40rpx;
+  height: 120rpx;
+  background: #f0f0f0;
+  border-radius: 8rpx;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 8rpx;
+  transition: height 0.5s;
+}
+
+.bar-label {
+  font-size: 20rpx;
+  color: #666;
+  margin-top: 8rpx;
+}
+
+.bar-value {
+  font-size: 20rpx;
+  color: #999;
+  margin-top: 4rpx;
+}

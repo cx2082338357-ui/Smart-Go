@@ -1,0 +1,52 @@
+<view class="container">
+  <view class="publish-form">
+    <!-- 内容输入 -->
+    <view class="content-section">
+      <textarea 
+        class="content-input"
+        placeholder="分享校园新鲜事..."
+        maxlength="500"
+        bindinput="onContentInput"
+      ></textarea>
+      <view class="word-count">
+        <text>{{content.length || 0}}/500</text>
+      </view>
+    </view>
+
+    <!-- 图片上传 -->
+    <view class="image-section">
+      <view class="image-list">
+        <view class="image-item" wx:for="{{images}}" wx:key="index">
+          <image src="{{item}}" mode="aspectFill"></image>
+          <view class="remove-btn" bindtap="removeImage" data-index="{{index}}">×</view>
+        </view>
+        <view class="add-image" bindtap="chooseImage" wx:if="{{images.length < 9}}">
+          <image src="/assets/icons/image.png" mode="aspectFit"></image>
+          <text>添加图片</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 标签选择 -->
+    <view class="tag-section">
+      <text class="section-label">选择话题</text>
+      <view class="tag-list">
+        <view 
+          class="tag-item {{selectedTags.indexOf(item) > -1 ? 'active' : ''}}" 
+          wx:for="{{availableTags}}" 
+          wx:key="index"
+          bindtap="toggleTag"
+          data-tag="{{item}}"
+        >
+          #{{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 发布按钮 -->
+    <button class="publish-btn {{loading ? 'loading' : ''}}" bindtap="submit" disabled="{{loading}}">
+      <text wx:if="{{!loading}}">发布</text>
+      <text wx:if="{{loading}}">发布中...</text>
+    </button>
+  </view>
+</view>

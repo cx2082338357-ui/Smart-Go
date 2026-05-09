@@ -1,0 +1,89 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/ai-chat/ai-chat",
+    "pages/schedule/schedule",
+    "pages/score/score",
+    "pages/community/community",
+    "pages/shopping/shopping",
+    "pages/orders/orders",
+    "pages/profile/profile",
+    "pages/bind-account/bind-account",
+    "pages/lost-found/lost-found",
+    "pages/delivery/delivery",
+    "pages/settings/settings",
+    "pages/about/about",
+    "pages/publish/publish",
+    "pages/lost-found-publish/lost-found-publish",
+    "pages/lost-found-detail/lost-found-detail",
+    "pages/lost-found-matches/lost-found-matches",
+    "pages/empty-classroom/empty-classroom",
+    "pages/campus-map/campus-map",
+    "pages/cart/cart",
+    "pages/post-detail/post-detail",
+    "pages/delivery-track/delivery-track",
+    "pages/schedule-week/schedule-week",
+    "pages/exam/exam",
+    "pages/rate-order/rate-order",
+    "pages/rider-apply/rider-apply",
+    "pages/product-detail/product-detail",
+    "pages/order-detail/order-detail"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1890ff",
+    "navigationBarTitleText": "智慧校园",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1890ff",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/ai-chat/ai-chat",
+        "text": "AI助手",
+        "iconPath": "assets/icons/ai.png",
+        "selectedIconPath": "assets/icons/ai-active.png"
+      },
+      {
+        "pagePath": "pages/schedule/schedule",
+        "text": "课表",
+        "iconPath": "assets/icons/schedule.png",
+        "selectedIconPath": "assets/icons/schedule-active.png"
+      },
+      {
+        "pagePath": "pages/community/community",
+        "text": "社区",
+        "iconPath": "assets/icons/community.png",
+        "selectedIconPath": "assets/icons/community-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于获取您的位置以提供上课提醒和附近服务"
+    }
+  },
+  "privacy": {
+    "allowedPhoneNumberCount": 1,
+    "phoneList": ["weixin"]
+  },
+  "requiredBackgroundModes": ["audio", "location"],
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
+}

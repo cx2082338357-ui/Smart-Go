@@ -1,0 +1,31 @@
+{
+  "desc": "关于本项目隐私政策的说明",
+  "rules": [
+    {
+      "permission": "userLocation",
+      "descs": [
+        "获取位置信息用于：1) 根据您的课表提供上课提醒服务；2) 推荐附近的服务和设施；3) 配送服务定位"
+      ]
+    },
+    {
+      "permission": "chooseAddress",
+      "descs": ["用于设置收货地址和配送位置"]
+    },
+    {
+      "permission": "camera",
+      "descs": ["用于身份认证拍照和社区发帖上传图片"]
+    },
+    {
+      "permission": "uploadFile",
+      "descs": ["用于上传头像和社区帖子图片"]
+    },
+    {
+      "permission": "getPhoneNumber",
+      "descs": ["用于一键登录智慧校园，授权后无需输入账号密码即可快速登录"]
+    },
+    {
+      "permission": "getUserInfo",
+      "descs": ["用于展示您的个人信息和社区互动"]
+    }
+  ]
+}

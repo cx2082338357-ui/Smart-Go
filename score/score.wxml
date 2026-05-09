@@ -1,0 +1,118 @@
+<view class="container">
+  <!-- 成绩概览卡片 -->
+  <view class="overview-card">
+    <view class="gpa-section">
+      <view class="gpa-circle">
+        <text class="gpa-value">{{gpaSummary.currentGPA || '0.00'}}</text>
+        <text class="gpa-label">当前GPA</text>
+      </view>
+      <view class="gpa-details">
+        <view class="detail-row">
+          <text class="detail-label">累计学分</text>
+          <text class="detail-value">{{gpaSummary.totalCredits || 0}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">已获学分</text>
+          <text class="detail-value">{{gpaSummary.earnedCredits || 0}}</text>
+        </view>
+        <view class="detail-row">
+          <text class="detail-label">平均成绩</text>
+          <text class="detail-value">{{gpaSummary.avgScore || 0}}分</text>
+        </view>
+      </view>
+    </view>
+    <!-- 学分进度 -->
+    <view class="credit-progress">
+      <view class="progress-header">
+        <text class="progress-title">毕业学分进度</text>
+        <text class="progress-percent">{{gpaSummary.progressPercent || 0}}%</text>
+      </view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{gpaSummary.progressPercent || 0}}%;"></view>
+      </view>
+      <view class="progress-info">
+        <text>{{gpaSummary.earnedCredits || 0}} / {{gpaSummary.requiredCredits || 160}} 学分</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 学期选择 -->
+  <view class="semester-selector">
+    <scroll-view class="semester-scroll" scroll-x>
+      <view 
+        class="semester-item {{selectedSemester === item.value ? 'active' : ''}}"
+        wx:for="{{semesters}}" 
+        wx:key="value"
+        bindtap="selectSemester"
+        data-value="{{item.value}}"
+      >
+        <text class="semester-name">{{item.label}}</text>
+        <text class="semester-gpa" wx:if="{{item.gpa}}">GPA: {{item.gpa}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 成绩列表 -->
+  <view class="score-list">
+    <view class="score-item" wx:for="{{scores}}" wx:key="id">
+      <view class="score-rank" style="background: {{item.rankColor}};">
+        <text>{{item.rank || '--'}}</text>
+      </view>
+      <view class="score-content">
+        <view class="score-header">
+          <text class="course-name">{{item.courseName}}</text>
+          <text class="course-credit">{{item.credits}}学分</text>
+        </view>
+        <view class="score-details">
+          <view class="score-grade">
+            <text class="grade-value" style="color: {{item.scoreColor}};">{{item.score}}</text>
+            <text class="grade-label">{{item.grade || '待定'}}</text>
+          </view>
+          <view class="score-meta">
+            <text class="score-type {{item.type === '必修' ? 'type-required' : 'type-elective'}}">{{item.type}}</text>
+            <text class="score-semester">{{item.semester}}</text>
+          </view>
+        </view>
+        <view class="score-chart">
+          <view class="chart-bar" style="width: {{item.scorePercent}}%; background: {{item.scoreColor}};"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成绩分析 -->
+  <view class="analysis-card card" wx:if="{{analysis}}">
+    <view class="card-title">成绩分析</view>
+    <view class="analysis-grid">
+      <view class="analysis-item">
+        <text class="analysis-value">{{analysis.highScore || 0}}</text>
+        <text class="analysis-label">最高分</text>
+      </view>
+      <view class="analysis-item">
+        <text class="analysis-value">{{analysis.lowScore || 0}}</text>
+        <text class="analysis-label">最低分</text>
+      </view>
+      <view class="analysis-item">
+        <text class="analysis-value">{{analysis.avgScore || 0}}</text>
+        <text class="analysis-label">平均分</text>
+      </view>
+      <view class="analysis-item">
+        <text class="analysis-value">{{analysis.passRate || 0}}%</text>
+        <text class="analysis-label">及格率</text>
+      </view>
+    </view>
+    <!-- 成绩分布图 -->
+    <view class="score-distribution">
+      <view class="distribution-title">成绩分布</view>
+      <view class="distribution-bars">
+        <view class="bar-item" wx:for="{{analysis.distribution}}" wx:key="range">
+          <view class="bar-wrapper">
+            <view class="bar" style="height: {{item.percent}}%; background: {{item.color}};"></view>
+          </view>
+          <text class="bar-label">{{item.range}}</text>
+          <text class="bar-value">{{item.count}}门</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

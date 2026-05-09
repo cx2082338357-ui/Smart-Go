@@ -1,0 +1,36 @@
+<view class="container">
+  <view class="header-card">
+    <text class="title">AI 智能匹配结果</text>
+    <text class="desc">共找到 {{items.length}} 条可能相关的信息</text>
+  </view>
+
+  <view class="list" wx:if="{{items.length > 0}}">
+    <view
+      class="item-card {{item.type}}"
+      wx:for="{{items}}"
+      wx:key="id"
+      bindtap="goToDetail"
+      data-id="{{item.id}}"
+    >
+      <view class="card-header">
+        <text class="badge">{{item.type === 'lost' ? '寻物' : '招领'}}</text>
+        <text class="time">{{item.timeAgo}}</text>
+      </view>
+      <text class="item-title">{{item.title}}</text>
+      <text class="item-desc">{{item.description}}</text>
+      <view class="ai-score-row">
+        <text class="ai-score">匹配度 {{item.aiScore || 0}}%</text>
+        <text class="ai-reason" wx:if="{{item.matchReasons && item.matchReasons.length}}">{{item.matchReasons[0]}}</text>
+      </view>
+      <view class="meta-row">
+        <text class="meta">{{item.location}}</text>
+        <text class="meta">{{item.lostTime}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{!loading && items.length === 0}}">
+    <text class="empty-title">暂无匹配结果</text>
+    <text class="empty-desc">可下拉刷新后再试</text>
+  </view>
+</view>

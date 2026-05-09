@@ -1,0 +1,268 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.week-header {
+  background: linear-gradient(135deg, #1890ff, #69c0ff);
+  padding: 24rpx 32rpx;
+  flex-shrink: 0;
+}
+
+.week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-btn {
+  width: 64rpx;
+  height: 64rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn image {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.week-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #fff;
+}
+
+.week-label {
+  font-size: 36rpx;
+  font-weight: 600;
+}
+
+.week-date {
+  font-size: 24rpx;
+  opacity: 0.8;
+  margin-top: 4rpx;
+}
+
+.schedule-scroll {
+  flex: 1;
+  background: #fff;
+}
+
+.schedule-table {
+  display: inline-block;
+  min-width: 100%;
+}
+
+.table-header {
+  display: flex;
+  background: #f8f9fa;
+  border-bottom: 1rpx solid #eee;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.time-col {
+  width: 140rpx;
+  flex-shrink: 0;
+}
+
+.day-col {
+  width: 200rpx;
+  flex-shrink: 0;
+}
+
+.header-cell {
+  padding: 20rpx 8rpx;
+  text-align: center;
+  border-right: 1rpx solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header-cell:last-child {
+  border-right: none;
+}
+
+.header-cell text {
+  color: #333;
+  font-size: 26rpx;
+}
+
+.day-name {
+  font-weight: 600 !important;
+  margin-bottom: 4rpx;
+}
+
+.day-date {
+  font-size: 22rpx !important;
+  color: #999 !important;
+}
+
+.table-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1rpx solid #f0f0f0;
+  min-height: 140rpx;
+}
+
+.content-cell {
+  padding: 8rpx;
+  border-right: 1rpx solid #f0f0f0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+
+.content-cell:last-child {
+  border-right: none;
+}
+
+.time-col.content-cell {
+  background: #fafafa;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 16rpx;
+}
+
+.slot-label {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.slot-time {
+  font-size: 20rpx;
+  color: #999;
+  margin-top: 4rpx;
+}
+
+.course-card {
+  width: 100%;
+  min-height: 80rpx;
+  border-radius: 8rpx;
+  padding: 8rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4rpx;
+}
+
+.course-name {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.course-location {
+  font-size: 18rpx;
+  color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  margin-top: 2rpx;
+}
+
+.empty-cell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #f0f0f0;
+}
+
+.schedule-legend {
+  background: #fff;
+  padding: 16rpx 32rpx;
+  text-align: center;
+  border-top: 1rpx solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.legend-title {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.back-btn {
+  position: fixed;
+  bottom: 40rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: rgba(24, 144, 255, 0.9);
+  color: #fff;
+  padding: 16rpx 32rpx;
+  border-radius: 48rpx;
+  font-size: 28rpx;
+  box-shadow: 0 4rpx 20rpx rgba(24, 144, 255, 0.3);
+}
+
+.back-btn image {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.loading-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16rpx;
+}
+
+.loading-mask text {
+  color: #fff;
+  font-size: 28rpx;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

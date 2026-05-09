@@ -1,0 +1,67 @@
+<view class="container" wx:if="{{!loading && item}}">
+  <!-- 类型标签 -->
+  <view class="type-badge {{item.type === 'lost' ? 'lost' : 'found'}}">
+    {{item.type === 'lost' ? '寻物' : '招领'}}
+  </view>
+
+  <!-- 标题 -->
+  <view class="title-section">
+    <text class="title">{{item.title}}</text>
+    <text class="time">{{item.timeAgo}}</text>
+  </view>
+
+  <!-- 发布者信息 -->
+  <view class="user-section">
+    <image class="avatar" src="{{item.avatar || '/assets/icons/default-avatar.png'}}" mode="aspectFill"></image>
+    <text class="nickname">{{item.nickname}}</text>
+  </view>
+
+  <!-- 详情描述 -->
+  <view class="detail-section">
+    <view class="detail-item">
+      <text class="label">地点</text>
+      <text class="value">{{item.location}}</text>
+    </view>
+    <view class="detail-item" wx:if="{{item.lostTime}}">
+      <text class="label">时间</text>
+      <text class="value">{{item.lostTime}}</text>
+    </view>
+    <view class="description">
+      <text class="label">详细描述</text>
+      <text class="desc-text">{{item.description}}</text>
+    </view>
+  </view>
+
+  <!-- 图片 -->
+  <view class="image-section" wx:if="{{item.images && item.images.length > 0}}">
+    <view class="image-list">
+      <image 
+        wx:for="{{item.images}}" 
+        wx:key="index"
+        src="{{item}}" 
+        mode="aspectFill"
+        bindtap="previewImage"
+        data-url="{{item}}"
+      ></image>
+    </view>
+  </view>
+
+  <!-- 联系按钮 -->
+  <view class="action-section">
+    <button class="contact-btn" bindtap="callContact" wx:if="{{item.contact}}">
+      立即联系
+    </button>
+    <view class="stats">
+      <text>浏览 {{item.views || 0}}</text>
+      <text>评论 {{item.comments || 0}}</text>
+    </view>
+  </view>
+</view>
+
+<view class="loading-state" wx:if="{{loading}}">
+  <text>加载中...</text>
+</view>
+
+<view class="loading-state" wx:if="{{!loading && !item}}">
+  <text>暂无内容或未找到该启事</text>
+</view>

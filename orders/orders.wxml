@@ -1,0 +1,135 @@
+<view class="container">
+  <!-- 订单状态标签 -->
+  <view class="status-tabs">
+    <view 
+      class="tab-item {{currentStatus === item.value ? 'active' : ''}}"
+      wx:for="{{statusTabs}}" 
+      wx:key="value"
+      bindtap="switchTab"
+      data-status="{{item.value}}"
+    >
+      <text>{{item.label}}</text>
+      <view class="tab-badge" wx:if="{{item.count > 0}}">{{item.count}}</view>
+    </view>
+  </view>
+
+  <!-- 订单列表 -->
+  <view class="order-list">
+    <view class="order-item" wx:for="{{orders}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+      <!-- 订单头部 -->
+      <view class="order-header">
+        <view class="shop-info">
+          <image class="shop-icon" src="{{item.shopIcon || '/assets/icons/shop.png'}}" mode="aspectFit" lazy-load></image>
+          <text class="shop-name">{{item.shopName}}</text>
+        </view>
+        <view class="order-status {{item.statusClass}}">
+          <text>{{item.statusText}}</text>
+        </view>
+      </view>
+
+      <!-- 订单商品 -->
+      <view class="order-products">
+        <view class="product-item" wx:for="{{item.products}}" wx:for-item="product" wx:key="id">
+          <image class="product-image" src="{{product.image || '/assets/icons/goods.png'}}" mode="aspectFill" lazy-load></image>
+          <view class="product-info">
+            <text class="product-name">{{product.name}}</text>
+            <text class="product-spec">{{product.spec || '默认规格'}}</text>
+          </view>
+          <view class="product-price">
+            <text class="price">¥{{product.price}}</text>
+            <text class="count">x{{product.count}}</text>
+          </view>
+        </view>
+        <view class="more-products" wx:if="{{item.products.length > 2}}">
+          <text>查看更多商品 ></text>
+        </view>
+      </view>
+
+      <!-- 订单信息 -->
+      <view class="order-info">
+        <view class="info-row">
+          <text class="label">订单编号：</text>
+          <text class="value">{{item.orderNo}}</text>
+          <view class="copy-btn" bindtap="copyOrderNo" data-no="{{item.orderNo}}">复制</view>
+        </view>
+        <view class="info-row">
+          <text class="label">下单时间：</text>
+          <text class="value">{{item.createTime}}</text>
+        </view>
+      </view>
+
+      <!-- 订单底部 -->
+      <view class="order-footer">
+        <view class="total-price">
+          <text class="label">合计：</text>
+          <text class="price">¥{{item.totalPrice}}</text>
+        </view>
+        <view class="action-btns">
+          <!-- 待支付 -->
+          <view class="action-btn btn-outline" wx:if="{{item.status === 'pending'}}" bindtap="cancelOrder" data-id="{{item.id}}">取消订单</view>
+          <view class="action-btn btn-primary" wx:if="{{item.status === 'pending'}}" bindtap="payOrder" data-id="{{item.id}}">立即支付</view>
+          
+          <!-- 配送中 -->
+          <view class="action-btn btn-outline" wx:if="{{item.status === 'delivering'}}" bindtap="viewDelivery" data-id="{{item.id}}">查看配送</view>
+          
+          <!-- 待收货 -->
+          <view class="action-btn btn-primary" wx:if="{{item.status === 'delivered'}}" bindtap="confirmReceive" data-id="{{item.id}}">确认收货</view>
+          
+          <!-- 已完成 -->
+          <view class="action-btn btn-outline" wx:if="{{item.status === 'completed'}}" bindtap="reOrder" data-id="{{item.id}}">再来一单</view>
+          <view class="action-btn btn-outline" wx:if="{{item.status === 'completed'}}" bindtap="rateOrder" data-id="{{item.id}}">评价</view>
+          
+          <!-- 已取消/已退款 -->
+          <view class="action-btn btn-outline" wx:if="{{item.status === 'cancelled' || item.status === 'refunded'}}" bindtap="deleteOrder" data-id="{{item.id}}">删除订单</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view class="load-more" wx:if="{{hasMore && orders.length > 0}}">
+    <text bindtap="loadMore">加载更多</text>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{orders.length === 0 && !loading}}">
+    <image class="empty-icon" src="/assets/icons/empty-order.png" mode="aspectFit"></image>
+    <text class="empty-text">暂无订单</text>
+    <view class="empty-btn" bindtap="goShopping">
+      <text>去逛逛</text>
+    </view>
+  </view>
+</view>
+
+<!-- 扫码支付弹窗 -->
+<view class="pay-modal" wx:if="{{showPayModal}}">
+  <view class="modal-mask" bindtap="closePayModal"></view>
+  <view class="modal-content">
+    <view class="modal-header">
+      <text>扫码支付</text>
+      <view class="close-btn" bindtap="closePayModal">
+        <image src="/assets/icons/close.png" mode="aspectFit"></image>
+      </view>
+    </view>
+    <view class="modal-body">
+      <view class="pay-amount">
+        <text class="amount">¥{{currentPayAmount}}</text>
+        <text class="amount-tip">长按保存收款码，使用微信扫一扫支付</text>
+      </view>
+      <view class="qrcode-wrap">
+        <image
+          class="qrcode-img"
+          src="/assets/icons/wechat-pay-qrcode.jpg"
+          mode="aspectFit"
+          show-menu-by-longpress
+        ></image>
+        <view class="qrcode-hint">截图 → 打开微信扫一扫 → 相册选图</view>
+      </view>
+      <view class="paid-tip">
+        <text class="paid-icon">✓</text>
+        <text>支付完成后点击下方按钮</text>
+      </view>
+      <button class="pay-btn" bindtap="onPaidConfirm">我已支付</button>
+    </view>
+  </view>
+</view>

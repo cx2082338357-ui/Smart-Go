@@ -1,0 +1,82 @@
+<view class="container">
+  <!-- 周次选择器 -->
+  <view class="week-header">
+    <view class="week-nav">
+      <view class="nav-btn" bindtap="prevWeek">
+        <image src="/assets/icons/left.png" mode="aspectFit"></image>
+      </view>
+      <view class="week-display">
+        <text class="week-label">第{{currentWeek}}周</text>
+        <text class="week-date">{{weekDateRange}}</text>
+      </view>
+      <view class="nav-btn" bindtap="nextWeek">
+        <image src="/assets/icons/right.png" mode="aspectFit"></image>
+      </view>
+    </view>
+  </view>
+
+  <!-- 周课表网格 -->
+  <scroll-view class="schedule-scroll" scroll-x="true" scroll-y="true">
+    <view class="schedule-table">
+      <!-- 表头 -->
+      <view class="table-header">
+        <view class="time-col header-cell">
+          <text>时间</text>
+        </view>
+        <view class="day-col header-cell" wx:for="{{weekDays}}" wx:key="index">
+          <text class="day-name">{{item.name}}</text>
+          <text class="day-date">{{item.date}}</text>
+        </view>
+      </view>
+
+      <!-- 课程内容 -->
+      <view class="table-body">
+        <view class="table-row" wx:for="{{timeSlots}}" wx:for-index="slotIdx" wx:key="index">
+          <!-- 时间列 -->
+          <view class="time-col content-cell">
+            <text class="slot-label">{{item.label}}</text>
+            <text class="slot-time">{{item.time}}</text>
+          </view>
+          
+          <!-- 星期格子 -->
+          <view class="day-col content-cell" wx:for="{{weekDays}}" wx:for-index="dayIdx" wx:for-item="day" wx:key="index">
+            <block wx:if="{{weekSchedule[dayIdx] && weekSchedule[dayIdx][slotIdx] && weekSchedule[dayIdx][slotIdx].courses.length > 0}}">
+              <view 
+                class="course-card"
+                style="background: {{courseColors[weekSchedule[dayIdx][slotIdx].courses[0].colorIndex % courseColors.length]}};"
+                wx:for="{{weekSchedule[dayIdx][slotIdx].courses}}"
+                wx:for-item="course"
+                wx:key="id"
+                bindtap="showCourseDetail"
+                data-course="{{course}}"
+              >
+                <text class="course-name">{{course.courseName}}</text>
+                <text class="course-location">{{course.location}}</text>
+              </view>
+            </block>
+            <view class="empty-cell" wx:else>
+              <text class="empty-dot"></text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- 图例 -->
+  <view class="schedule-legend">
+    <text class="legend-title">本周共 {{weekCourseCount}} 节课</text>
+  </view>
+
+  <!-- 返回按钮 -->
+  <view class="back-btn" bindtap="goToSchedule">
+    <image src="/assets/icons/left.png" mode="aspectFit"></image>
+    <text>返回日视图</text>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-mask" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text>加载中...</text>
+  </view>
+</view>

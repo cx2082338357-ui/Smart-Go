@@ -1,0 +1,156 @@
+<view class="container">
+  <!-- 通知设置 -->
+  <view class="setting-section">
+    <view class="section-title">通知设置</view>
+    <view class="setting-list">
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-label">上课提醒</text>
+          <text class="setting-desc">提前15分钟推送提醒</text>
+        </view>
+        <switch checked="{{settings.classReminder}}" bindchange="toggleSetting" data-key="classReminder" color="#1890ff"/>
+      </view>
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-label">成绩通知</text>
+          <text class="setting-desc">成绩发布时及时推送</text>
+        </view>
+        <switch checked="{{settings.scoreNotice}}" bindchange="toggleSetting" data-key="scoreNotice" color="#1890ff"/>
+      </view>
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-label">社区消息</text>
+          <text class="setting-desc">社区互动消息通知</text>
+        </view>
+        <switch checked="{{settings.communityNotice}}" bindchange="toggleSetting" data-key="communityNotice" color="#1890ff"/>
+      </view>
+      <view class="setting-item">
+        <view class="setting-left">
+          <text class="setting-label">订单状态</text>
+          <text class="setting-desc">配送订单状态通知</text>
+        </view>
+        <switch checked="{{settings.orderNotice}}" bindchange="toggleSetting" data-key="orderNotice" color="#1890ff"/>
+      </view>
+    </view>
+  </view>
+
+  <view class="setting-section">
+    <view class="section-title">开发调试</view>
+    <view class="setting-list api-setting-list">
+      <view class="api-config">
+        <text class="setting-label">后端 API 地址</text>
+        <text class="setting-desc">开发者工具可用 http://127.0.0.1:8080。真机若连电脑局域网 IP，手机必须与电脑同一 Wi‑Fi；若用手机流量（4G/5G），请填 cloudflared 等生成的 https 隧道地址（须含端口 :8080）</text>
+        <input
+          class="api-input"
+          type="text"
+          value="{{apiBaseUrl}}"
+          placeholder="请输入 http(s):// 开头的地址"
+          bindinput="onApiInput"
+        />
+        <view class="api-actions">
+          <view class="api-btn api-btn-primary" bindtap="saveApiConfig">保存业务地址</view>
+          <view class="api-btn" bindtap="testApiConfig">测试连接</view>
+          <view class="api-btn api-btn-ghost" bindtap="resetApiConfig">恢复默认</view>
+        </view>
+        <text class="api-hint">默认业务地址：{{defaultApiBaseUrl}}</text>
+      </view>
+
+      <view class="api-config">
+        <text class="setting-label">真机局域网地址</text>
+        <text class="setting-desc">真机调试时请填写电脑在同一 Wi-Fi 下的局域网地址，页面会自动尝试检测。</text>
+        <input
+          class="api-input"
+          type="text"
+          value="{{localLanApiBaseUrl}}"
+          placeholder="例如：http://192.168.1.100:8080"
+          bindinput="onLanApiInput"
+        />
+        <view class="api-actions">
+          <view class="api-btn api-btn-primary" bindtap="saveLanApiConfig">保存局域网地址</view>
+          <view class="api-btn api-btn-ghost" bindtap="resetApiConfig">清空局域网地址</view>
+        </view>
+        <text class="api-hint">保存后会优先用于真机访问</text>
+      </view>
+
+      <view class="api-config">
+        <text class="setting-label">校区定位校准</text>
+        <text class="setting-desc">当前将导航到：{{campusName}}</text>
+        <text class="api-hint">地址：{{campusAddress}}</text>
+        <text class="api-hint">坐标：{{campusCoordText}}</text>
+        <view class="api-actions">
+          <view class="api-btn api-btn-primary" bindtap="pickCampusLocation">地图选点校准</view>
+          <view class="api-btn api-btn-ghost" bindtap="resetCampusLocation">恢复默认校区</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 隐私设置 -->
+  <view class="setting-section">
+    <view class="section-title">隐私设置</view>
+    <view class="setting-list">
+      <view class="setting-item" bindtap="goPage" data-page="privacy">
+        <view class="setting-left">
+          <text class="setting-label">隐私政策</text>
+        </view>
+        <view class="setting-arrow">
+          <image src="/assets/icons/right.png" mode="aspectFit"></image>
+        </view>
+      </view>
+      <view class="setting-item" bindtap="goPage" data-page="agreement">
+        <view class="setting-left">
+          <text class="setting-label">用户协议</text>
+        </view>
+        <view class="setting-arrow">
+          <image src="/assets/icons/right.png" mode="aspectFit"></image>
+        </view>
+      </view>
+      <view class="setting-item" bindtap="clearCache">
+        <view class="setting-left">
+          <text class="setting-label">清除缓存</text>
+        </view>
+        <view class="setting-right">
+          <text class="cache-size">{{cacheSize}}</text>
+          <image src="/assets/icons/right.png" mode="aspectFit"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 其他设置 -->
+  <view class="setting-section">
+    <view class="section-title">其他</view>
+    <view class="setting-list">
+      <view class="setting-item" bindtap="checkUpdate">
+        <view class="setting-left">
+          <text class="setting-label">检查更新</text>
+        </view>
+        <view class="setting-right">
+          <text class="version">v{{version}}</text>
+          <image src="/assets/icons/right.png" mode="aspectFit"></image>
+        </view>
+      </view>
+      <view class="setting-item" bindtap="goPage" data-page="feedback">
+        <view class="setting-left">
+          <text class="setting-label">意见反馈</text>
+        </view>
+        <view class="setting-arrow">
+          <image src="/assets/icons/right.png" mode="aspectFit"></image>
+        </view>
+      </view>
+      <view class="setting-item" bindtap="goPage" data-page="about">
+        <view class="setting-left">
+          <text class="setting-label">关于我们</text>
+        </view>
+        <view class="setting-arrow">
+          <image src="/assets/icons/right.png" mode="aspectFit"></image>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 退出登录 -->
+  <view class="logout-btn" bindtap="logout">
+    <text>退出登录</text>
+  </view>
+</view>

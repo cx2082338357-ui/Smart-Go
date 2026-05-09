@@ -1,0 +1,53 @@
+<view class="container">
+  <!-- 帖子内容 -->
+  <view class="post-card" wx:if="{{post}}">
+    <view class="post-header">
+      <image class="avatar" src="{{post.avatar || '/assets/icons/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-info">
+        <text class="nickname">{{post.nickname}}</text>
+        <text class="time">{{post.timeAgo}}</text>
+      </view>
+    </view>
+    <view class="post-content">
+      <text class="content-text">{{post.content}}</text>
+      <view class="image-grid" wx:if="{{post.images && post.images.length > 0}}">
+        <image wx:for="{{post.images}}" wx:key="index" src="{{item}}" mode="aspectFill" class="post-image"></image>
+      </view>
+      <view class="tags" wx:if="{{post.tags && post.tags.length > 0}}">
+        <text class="tag" wx:for="{{post.tags}}" wx:key="index">#{{item}}</text>
+      </view>
+    </view>
+    <view class="action-bar">
+      <view class="action-item {{post.liked ? 'active' : ''}}" bindtap="toggleLike">
+        <image src="{{post.liked ? '/assets/icons/liked.png' : '/assets/icons/like.png'}}" mode="aspectFit"></image>
+        <text>{{post.likes || 0}}</text>
+      </view>
+      <view class="action-item">
+        <image src="/assets/icons/comment.png" mode="aspectFit"></image>
+        <text>{{comments.length || 0}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 评论区 -->
+  <view class="comments-section">
+    <text class="section-title">评论 ({{comments.length}})</text>
+    <view class="comment-item" wx:for="{{comments}}" wx:key="id">
+      <image class="comment-avatar" src="{{item.avatar || '/assets/icons/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="comment-body">
+        <text class="comment-nickname">{{item.nickname}}</text>
+        <text class="comment-content">{{item.content}}</text>
+        <text class="comment-time">{{item.time}}</text>
+      </view>
+    </view>
+    <view class="empty-comments" wx:if="{{comments.length === 0}}">
+      <text>暂无评论，快来抢沙发</text>
+    </view>
+  </view>
+
+  <!-- 评论输入框 -->
+  <view class="comment-input-bar">
+    <input class="comment-input" placeholder="写下你的评论..." value="{{commentText}}" bindinput="onCommentInput" confirm-type="send" bindconfirm="submitComment"></input>
+    <button class="send-btn" bindtap="submitComment">发送</button>
+  </view>
+</view>
