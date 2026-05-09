@@ -1,0 +1,20 @@
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+python-multipart>=0.0.6
+redis>=5.0.0
+httpx>=0.24.0
+python-dotenv>=1.0.0
+# AI 模型（Qwen3.5-2B 本地推理）
+transformers>=4.40.0
+torch>=2.0.0
+modelscope>=1.16.0
+sentence-transformers>=2.2.0
+accelerate>=0.20.0
+chromadb>=0.5.0
+langchain-huggingface>=0.1.0
+langchain-community>=0.3.0
+langchain-text-splitters>=0.3.0
